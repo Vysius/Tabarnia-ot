@@ -26,7 +26,7 @@
 #include "weapons.h"
 #include "configmanager.h"
 #include "game.h"
-
+#include "databasetasks.h"
 #include "pugicast.h"
 
 extern Game g_game;
@@ -99,6 +99,8 @@ void MonsterType::createLoot(Container* corpse)
 				if (g_game.internalAddItem(corpse, item) != RETURNVALUE_NOERROR) {
 					corpse->internalAddThing(item);
 				}
+				insertLootStatistic(item->getID(), item->getItemCount());
+
 			}
 		}
 
@@ -1328,4 +1330,12 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
+}
+
+void MonsterType::insertLootStatistic(uint32_t itemID, uint32_t itemCount)
+{
+	std::ostringstream query;
+	query << "INSERT INTO stats_loot (creature_name,item_id,times_dropped) VALUES ('" << nameDescription << "'," << itemID << "," << itemCount << ") " <<
+		"	 ON DUPLICATE KEY UPDATE times_dropped = times_dropped + " << itemCount;
+	g_databaseTasks.addTask(query.str());
 }
