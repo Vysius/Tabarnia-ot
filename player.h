@@ -1467,6 +1467,8 @@ class Player final : public Creature, public Cylinder
 		int32_t offlineTrainingTime = 0;
 		int32_t idleTime = 0;
 		uint16_t expBoostStamina = 0;
+		uint32_t attackSpeed = 0;
+
 
 		uint16_t lastStatsTrainingTime = 0;
 		uint16_t staminaMinutes = 2520;
@@ -1520,7 +1522,14 @@ class Player final : public Creature, public Cylinder
 
 		bool isPromoted() const;
 
+		void setAttackSpeed(uint32_t speed) {
+            attackSpeed = speed;
+        }
+
 		uint32_t getAttackSpeed() const {
+			if (attackSpeed > 0) {
+				return attackSpeed;
+			}
 			return vocation->getAttackSpeed();
 		}
 
