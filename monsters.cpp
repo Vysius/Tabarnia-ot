@@ -1335,7 +1335,9 @@ MonsterType* Monsters::getMonsterType(const std::string& name)
 void MonsterType::insertLootStatistic(uint32_t itemID, uint32_t itemCount)
 {
 	std::ostringstream query;
-	query << "INSERT INTO stats_loot (creature_name,item_id,times_dropped) VALUES ('" << nameDescription << "'," << itemID << "," << itemCount << ") " <<
+	std::string replacedNameDescription = nameDescription;
+	boost::replace_all(replacedNameDescription, "'", "''");
+	query << "INSERT INTO stats_loot (creature_name,item_id,times_dropped) VALUES ('" << replacedNameDescription << "'," << itemID << "," << itemCount << ") " <<
 		"	 ON DUPLICATE KEY UPDATE times_dropped = times_dropped + " << itemCount;
 	g_databaseTasks.addTask(query.str());
 }

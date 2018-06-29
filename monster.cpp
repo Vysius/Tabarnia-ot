@@ -1986,7 +1986,9 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 void Monster::insertKillStatistics()
 {
 	std::ostringstream query;
-	query << "INSERT INTO stats_creatures (creature_name,times_killed) VALUES ('" << mType->nameDescription << "',1) " <<
+	std::string nameDescription = mType->nameDescription;
+	boost::replace_all(nameDescription, "'", "''");
+	query << "INSERT INTO stats_creatures (creature_name,times_killed) VALUES ('" << nameDescription << "',1) " <<
 		"	  ON DUPLICATE KEY UPDATE times_killed = times_killed + 1";
 	g_databaseTasks.addTask(query.str());
 }
