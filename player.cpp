@@ -4108,6 +4108,22 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	return false;
 }
 
+//Autoloot
+void Player::addAutoLootItem(uint16_t itemId)
+{
+	autoLootList.insert(itemId);
+}
+
+void Player::removeAutoLootItem(uint16_t itemId)
+{
+	autoLootList.erase(itemId);
+}
+
+bool Player::getAutoLootItem(const uint16_t itemId)
+{
+	return autoLootList.find(itemId) != autoLootList.end();
+}
+
 bool Player::isInWar(const Player* player) const
 {
 	if (!player || !guild) {
